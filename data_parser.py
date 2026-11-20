@@ -3,6 +3,7 @@
 import webbrowser
 import urllib.request
 from html.parser import HTMLParser
+import random
 
 BASE_URL = "https://www.nhm.ac.uk"
 AZ_URL = "https://www.nhm.ac.uk/discover/dino-directory/name/name-az-all/gallery.html"
@@ -55,10 +56,18 @@ def collect_html_page():
 def collect_dino_urls(page_html):
     parser = DinoLinksParser()
     parser.feed(page_html)
-    print("Links\n")
-    for link in parser.links:
-        print(link)
+    return parser.links
+
+def select_random_urls(urls):
+    return random.sample(urls, 20)
 
 if __name__ == "__main__":
     page = collect_html_page()
     collect_dino_urls(page)
+    links = select_random_urls(collect_dino_urls(page))
+
+    for link in links:
+        print(link)
+
+    print(len(links))
+
