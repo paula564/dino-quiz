@@ -28,14 +28,63 @@ class DinoLinksParser(HTMLParser):
 
     def handle_data(self, data):
         if self.in_link:
-            name = data.strip()
-            if name and self.current_href not in self.links:
+            content = data.strip()
+            if content and self.current_href not in self.links:
                 self.links.append(BASE_URL + self.current_href)
 
     def handle_endtag(self, tag):
         if tag == "a":
             self.in_link = False
             self.current_href = ""
+
+class DinoDataParser(HTMLParser):
+    def __init__(self):
+           super().__init__()
+           self.in_dl = False
+           self.in_dt = False
+           self.in_dd = False
+
+        #save the current dt and dd
+           self.current_term = ""
+           self.current_data = ""
+        #where we will store the key pair values
+           self.dino_data = {}
+
+    def handle_starttag(self, tag, attrs):
+        #an else if chain to determine if all the tags are there
+        if tag == "dl":
+            self.in_dl = True
+        elif self.in_dl and tag == "dt":
+            self.in_dt = True
+            self.current_term = ""
+        elif self.in_dl and tag == "dd":
+            self.in_dd = True
+            self.current_data = ""
+
+    def handle_data(self, data):
+        content = data.strip()
+        if content:
+            if self.in_dt:
+                self.current_term += content
+            elif self.in_dd and self.current_term:
+                self.current_data += content
+                
+
+    def handle_endtag(self, tag):
+        if tag == "dl":
+           self.in_dl = False
+        elif tag == "dt":
+            self.in_dt = False
+            self.current_term = self.current_term.rstrip(":")
+            if self.current_term:
+                self.dino_data[self.current_term] = ""
+        elif tag == "dd":
+            self.in_dd = False
+            if self.current_term:
+                self.dino_data[self.current_term] = self.current_data.strip("'")
+            self.current_data = ""
+
+ 
         
 
 def collect_html_page():
@@ -53,6 +102,22 @@ def collect_html_page():
     page_html = page_bytes.decode("utf-8")
     return page_html
 
+def collect_dino_data_html(urls):
+    all_html = []
+    for url in urls:
+        headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        req = urllib.request.Request(url, headers=headers)
+    
+        with urllib.request.urlopen(req, timeout=15) as response:
+            page_bytes = response.read()
+
+        page_html = page_bytes.decode("utf-8")
+        all_html.append(page_html)
+
+    return all_html
+
 def collect_dino_urls(page_html):
     parser = DinoLinksParser()
     parser.feed(page_html)
@@ -61,13 +126,28 @@ def collect_dino_urls(page_html):
 def select_random_urls(urls):
     return random.sample(urls, 20)
 
+def collet_dino_json_data(html_pages):
+    data = []
+    for page in html_pages:
+        parser = DinoDataParser()
+        parser.feed(page)
+        data.append(parser.dino_data)
+    return data
+    
+
 if __name__ == "__main__":
     page = collect_html_page()
-    collect_dino_urls(page)
     links = select_random_urls(collect_dino_urls(page))
 
-    for link in links:
-        print(link)
 
-    print(len(links))
+    dino_pages_html = collect_dino_data_html(links)
+    data = collet_dino_json_data(dino_pages_html)
+
+    for dino in data:
+        print(dino)
+
+    
+
+    
+  
 
