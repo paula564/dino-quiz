@@ -4,6 +4,7 @@ import webbrowser
 import urllib.request
 from html.parser import HTMLParser
 import random
+import json
 
 BASE_URL = "https://www.nhm.ac.uk"
 AZ_URL = "https://www.nhm.ac.uk/discover/dino-directory/name/name-az-all/gallery.html"
@@ -72,20 +73,27 @@ class DinoDataParser(HTMLParser):
 
     def handle_endtag(self, tag):
         if tag == "dl":
-           self.in_dl = False
+            self.in_dl = False
+            #unwraps single values in list to just be strings since a dino can have mulitple locations
+            for key, val in self.dino_data.items():
+                if isinstance(val, list) and len(val) == 1:
+                    self.dino_data[key] = val[0]
+
         elif tag == "dt":
             self.in_dt = False
             self.current_term = self.current_term.rstrip(":")
             if self.current_term:
-                self.dino_data[self.current_term] = ""
+                self.dino_data[self.current_term] = []  
+
         elif tag == "dd":
             self.in_dd = False
             if self.current_term:
-                self.dino_data[self.current_term] = self.current_data.strip("'")
+                cleaned = self.current_data.strip().strip("'")
+                if cleaned:
+                    self.dino_data[self.current_term].append(cleaned)  
             self.current_data = ""
 
- 
-        
+
 
 def collect_html_page():
 
@@ -143,8 +151,10 @@ if __name__ == "__main__":
     dino_pages_html = collect_dino_data_html(links)
     data = collet_dino_json_data(dino_pages_html)
 
-    for dino in data:
-        print(dino)
+    with open("dinos.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+    
 
     
 
