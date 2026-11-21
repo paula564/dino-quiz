@@ -45,9 +45,13 @@ class DinoDataParser(HTMLParser):
            self.in_dt = False
            self.in_dd = False
 
+           self.in_h1 = False
+
         #save the current dt and dd
            self.current_term = ""
            self.current_data = ""
+
+           self.h1 = ""
         #where we will store the key pair values
            self.dino_data = {}
 
@@ -61,6 +65,9 @@ class DinoDataParser(HTMLParser):
         elif self.in_dl and tag == "dd":
             self.in_dd = True
             self.current_data = ""
+        elif tag == "h1":
+            self.in_h1 = True
+            self.h1 = ""
 
     def handle_data(self, data):
         content = data.strip()
@@ -69,6 +76,8 @@ class DinoDataParser(HTMLParser):
                 self.current_term += content
             elif self.in_dd and self.current_term:
                 self.current_data += content
+            elif self.in_h1:
+                self.h1 += content
                 
 
     def handle_endtag(self, tag):
@@ -88,10 +97,15 @@ class DinoDataParser(HTMLParser):
         elif tag == "dd":
             self.in_dd = False
             if self.current_term:
-                cleaned = self.current_data.strip().strip("'")
+                cleaned = self.current_data.strip().strip("', ")
                 if cleaned:
                     self.dino_data[self.current_term].append(cleaned)  
             self.current_data = ""
+
+        elif tag == "h1":
+            self.in_h1 = False
+            if self.h1:
+                self.dino_data['Name'] = self.h1.strip()
 
 
 
