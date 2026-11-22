@@ -1,6 +1,7 @@
 import random
 import json
 from collections import defaultdict
+import re
 
 with open("dinos.json", "r", encoding="utf-8") as file:
     dinos = json.load(file)
@@ -15,6 +16,13 @@ def question_builder(question, correct, incorrect_options):
         "options": options,
         "answer": correct
         }
+
+def parse_weight(weight_str):
+    cleaned = str(weight_str).lower().replace("kg", "").replace(",", "").strip()
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
 
 def q_diet(dinos):
     dinos_with_diet = [dino for dino in dinos if dino.get("Name") and dino.get("Diet")]
@@ -111,13 +119,46 @@ def q_meaninng(dinos):
     incorrect = [meaning for meaning in meanings if meaning != target_dino.get("Name meaning")]
     return question_builder(f"What is the name meaning of the {target_dino.get("Name")}?", target_dino.get("Name meaning"), incorrect)
 
+def q_heaviest_weight(dinos):
+    weights = {}
+    for dino in dinos:
+        if dino.get("Name") and dino.get("Weight"):
+            num_weight = parse_weight(dino["Weight"])
+            if num_weight is not None:
+                weights[num_weight] = dino
+
+    if len(weights) < 4:
+        return None
+
+    sample_dinos = random.sample(list(weights.values()), 4)
+    heaviest_dino = max(sample_dinos, key=lambda dino: parse_weight(dino["Weight"]))
+
+    incorrect = [dino["Name"] for dino in sample_dinos if dino["Name"] != heaviest_dino["Name"]]
+
+    return question_builder("Of the four dinosaurs, which one was the heaviest?", heaviest_dino["Name"], incorrect)
+
+def q_teeth(dinos):
+    dinos_with_teeth = [dino for dino in dinos if dino.get("Name") and dino.get("Teeth")]
+    teeth = list({dino["Teeth"] for dino in dinos_with_teeth})
+    if len(dinos_with_teeth) < 1 or len(teeth) < 4:
+        return None
+    target_dino = random.choice(dinos_with_teeth)
+    incorrect = [t.capitalize() for t in teeth if t != target_dino.get("Teeth")]
+    return question_builder(f"What kind of teeth did the {target_dino.get("Name")} have?", target_dino.get("Teeth").capitalize(), incorrect)
+
 
         
-
+"""
 print(q_length(dinos))
 print(q_diet(dinos))
 print(q_region(dinos))
 print(q_odd_one_out_type(dinos))
 print(q_period(dinos))
 print(q_meaninng(dinos))
+"""
+
+print(q_heaviest_weight(dinos))
+print(q_teeth(dinos))
+
+
 
