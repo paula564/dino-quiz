@@ -67,7 +67,7 @@ def q_length(dinos):
     if len(dinos_with_length) < 1 or len(lengths) < 4:
         return None
     target_dino = random.choice(dinos_with_length)
-    incorrect = [length for length  in lengths if length != target_dino.get("Length")]
+    incorrect = [length for length in lengths if length != target_dino.get("Length")]
     return question_builder(f"What was the length of the {target_dino.get("Name")}?", target_dino.get("Length"), incorrect)
 
 
@@ -100,8 +100,24 @@ def q_region(dinos):
         return None
 
     return question_builder(f"Which of these dinosaurs was found in {correct_region}?", random.choice(correct), incorrect_dinos)
+
+
+def q_meaninng(dinos):
+    dinos_with_meaning = [dino for dino in dinos if dino.get("Name") and dino.get("Name meaning")]
+    meanings = list({dino["Name meaning"] for dino in dinos_with_meaning})
+    if len(dinos_with_meaning) < 1 or len(meanings) < 4:
+        return None
+    target_dino = random.choice(dinos_with_meaning)
+    incorrect = [meaning for meaning in meanings if meaning != target_dino.get("Name meaning")]
+    return question_builder(f"What is the name meaning of the {target_dino.get("Name")}?", target_dino.get("Name meaning"), incorrect)
+
+
         
 
-
+print(q_length(dinos))
+print(q_diet(dinos))
 print(q_region(dinos))
+print(q_odd_one_out_type(dinos))
+print(q_period(dinos))
+print(q_meaninng(dinos))
 
