@@ -70,11 +70,38 @@ def q_length(dinos):
     incorrect = [length for length  in lengths if length != target_dino.get("Length")]
     return question_builder(f"What was the length of the {target_dino.get("Name")}?", target_dino.get("Length"), incorrect)
 
-  
+
+def q_region(dinos):
+    dinos_by_region = defaultdict(list)
+    
+    for dino in dinos:
+        name = dino.get("Name")
+        dino_region = dino.get("Found in")
+
+        if name and dino_region:
+            if isinstance(dino_region, str):
+                dino_region = [dino_region]
+                
+            for region in dino_region:
+                if name not in dinos_by_region[region]:
+                    dinos_by_region[region].append(name)
+                    
+    valid_regions = [region for region, names in dinos_by_region.items() if len(names) >= 3]
+    if not valid_regions or len(dinos_by_region) < 2:
+        return None
+    
+    correct_region = random.choice(valid_regions)
+    correct = dinos_by_region[correct_region]
+
+    #handles situation where dino in both correct and incorrect region
+    incorrect_dinos = list({name for region, names in dinos_by_region.items() if region != correct_region for name in names} - set(correct))
+
+    if len(incorrect_dinos) < 3:
+        return None
+
+    return question_builder(f"Which of these dinosaurs was found in {correct_region}?", random.choice(correct), incorrect_dinos)
         
 
-odd = q_odd_one_out_type(dinos)
-length = q_length(dinos)
 
-print(odd)
-print(length)
+print(q_region(dinos))
+
