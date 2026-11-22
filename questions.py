@@ -1,5 +1,6 @@
 import random
 import json
+from collections import defaultdict
 
 with open("dinos.json", "r", encoding="utf-8") as file:
     dinos = json.load(file)
@@ -16,7 +17,7 @@ def question_builder(question, correct, incorrect_options):
         }
 
 def q_diet(dinos):
-    dinos_with_diet = [d for d in dinos if d.get("Name") and d.get("Diet")]
+    dinos_with_diet = [dino for dino in dinos if dino.get("Name") and dino.get("Diet")]
     diets = ["herbivorous", "carnivorous", "omnivorous", "insectivorous" ]
     if len(dinos_with_diet) < 1:
         return None
@@ -26,16 +27,54 @@ def q_diet(dinos):
         
 
 def q_period(dinos):
-    dinos_with_period = [d for d in dinos if d.get("Name") and d.get("When it lived")]
-    periods = list({d["When it lived"] for d in dinos_with_period})
+    dinos_with_period = [dino for dino in dinos if dino.get("Name") and dino.get("When it lived")]
+    periods = list({dino["When it lived"] for dino in dinos_with_period})
     if len(dinos_with_period) < 1 or len(periods) < 4:
         return None
     target_dino = random.choice(dinos_with_period)
     incorrect = [period for period in periods if period != target_dino.get("When it lived")]
     return question_builder(f"During which period did the {target_dino.get("Name")} live?", target_dino.get("When it lived"), incorrect)
 
-diet = q_diet(dinos)
-period = q_period(dinos)
+def q_odd_one_out_type(dinos):
+    dinos_by_type = defaultdict(list)
+    for dino in dinos:
+        name = dino.get("Name")
+        dino_type = dino.get("Type of dinosaur")
+        if name and dino_type:
+            dinos_by_type[dino_type].append(name)
 
-print(diet)
-print(period)
+    valid_types = [type for type, names in dinos_by_type.items() if len(names) >= 3]
+
+    if not valid_types or len(dinos_by_type) < 2:
+        return None
+
+    target_type = random.choice(valid_types)
+    incorrect = dinos_by_type[target_type]
+
+    #checks that the type is not equivalent to the target type. appends the names of the dinos not matching the target type
+    correct_dinos = [name for type, names in dinos_by_type.items() if type != target_type for name in names]
+
+    if not correct_dinos:
+        return None
+
+    target_dino = random.choice(correct_dinos)
+
+    return question_builder(f"Which of the following dinosaurs is not of the {target_type} type?", target_dino, incorrect)
+
+def q_length(dinos):
+    dinos_with_length = [dino for dino in dinos if dino.get("Name") and dino.get("Length")]
+    lengths = list({dino["Length"] for dino in dinos_with_length})
+    if len(dinos_with_length) < 1 or len(lengths) < 4:
+        return None
+    target_dino = random.choice(dinos_with_length)
+    incorrect = [length for length  in lengths if length != target_dino.get("Length")]
+    return question_builder(f"What was the length of the {target_dino.get("Name")}?", target_dino.get("Length"), incorrect)
+
+  
+        
+
+odd = q_odd_one_out_type(dinos)
+length = q_length(dinos)
+
+print(odd)
+print(length)
