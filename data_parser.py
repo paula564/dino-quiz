@@ -78,6 +78,7 @@ class DinoDataParser(HTMLParser):
                 self.current_data += content
             elif self.in_h1:
                 self.h1 += content
+        
                 
 
     def handle_endtag(self, tag):
