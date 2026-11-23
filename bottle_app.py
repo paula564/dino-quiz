@@ -13,8 +13,8 @@ def quiz_form():
 
 @post("/quiz")
 def quiz_submit():
-    selected = [request.forms.get("q" + str(i)) for i in range(5)]
-    correct = [request.forms.get(f"ans{i}") for i in range(5)]
+    selected = [request.forms.getunicode(f"q{i}") for i in range(5)]
+    correct = [request.forms.getunicode(f"ans{i}") for i in range(5)]
 
     score = 0
     for i in range(5):

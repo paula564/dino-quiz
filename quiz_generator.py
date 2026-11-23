@@ -9,7 +9,7 @@ with open("dinos.json", "r", encoding="utf-8") as file:
 
 def question_builder(question, correct, incorrect_options):
     options = [correct] + random.sample(incorrect_options, 3)
-    random.shuffle(incorrect_options)
+    random.shuffle(options) 
 
     return {
         "question": question,
