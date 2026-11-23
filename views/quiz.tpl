@@ -5,7 +5,7 @@
 <form action="/quiz" method="post">
 % for i, q in enumerate(questions):
             <p><strong>{{i + 1}}. {{q["question"]}}</strong></p>
-            
+            <input type="hidden" name="ans{{i}}" value="{{q['answer']}}">
             % for option in q["options"]:
                 <label>
                     <input type="radio" name="q{{i}}" value="{{option}}" required>
