@@ -1,7 +1,10 @@
 from html import escape
 from pathlib import Path
-from bottle import get, post, request, run, static_file, template, html_escape 
+from bottle import get, post, request, run, static_file, template, html_escape
 from quiz_generator import dinos, generate_quiz
+import os
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 @get("/quiz")
 def quiz_form():
@@ -19,6 +22,10 @@ def quiz_submit():
             score += 1
 
     return template('results', correct=correct, selected=selected, score=score)
+
+@get("/static/<filename>")
+def serve_css(filename):
+    return static_file(filename, root=str(STATIC_DIR))
 
 
 
