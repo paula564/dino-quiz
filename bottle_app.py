@@ -14,24 +14,12 @@ def quiz_submit():
     correct = [request.forms.get(f"ans{i}") for i in range(5)]
 
     score = 0
-
     for i in range(5):
         if selected[i] == correct[i]:
             score += 1
-    return template('''
-        <h1>Results</h1>
-        <ul>
-        % for c in correct:
-            <li>{{c}}</li>
-        % end
-        </ul>
-        <ul>
-        % for s in selected:
-        <li>{{s}}</li>
-        % end
-        </ul>
-        <p>{{score}}</p>
-    ''', correct=correct, selected=selected, score=score)
+
+    return template('results', correct=correct, selected=selected, score=score)
+
 
 
 
