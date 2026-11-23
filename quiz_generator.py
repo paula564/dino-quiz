@@ -110,7 +110,7 @@ def q_region(dinos):
     return question_builder(f"Which of these dinosaurs was found in {correct_region}?", random.choice(correct), incorrect_dinos)
 
 
-def q_meaninng(dinos):
+def q_meaning(dinos):
     dinos_with_meaning = [dino for dino in dinos if dino.get("Name") and dino.get("Name meaning")]
     meanings = list({dino["Name meaning"] for dino in dinos_with_meaning})
     if len(dinos_with_meaning) < 1 or len(meanings) < 4:
@@ -147,18 +147,31 @@ def q_teeth(dinos):
     return question_builder(f"What kind of teeth did the {target_dino.get("Name")} have?", target_dino.get("Teeth").capitalize(), incorrect)
 
 
-        
-"""
-print(q_length(dinos))
-print(q_diet(dinos))
-print(q_region(dinos))
-print(q_odd_one_out_type(dinos))
-print(q_period(dinos))
-print(q_meaninng(dinos))
-"""
+ALL_TEMPLATES = [
+    q_diet,
+    q_period,
+    q_odd_one_out_type,
+    q_region,
+    q_length,
+    q_meaning,
+    q_heaviest_weight,
+    q_teeth
+    ]
 
-print(q_heaviest_weight(dinos))
-print(q_teeth(dinos))
 
+def generate_quiz(dinos, num_questions=5):
+    pool = ALL_TEMPLATES[:]
+    random.shuffle(pool)
+    questions = []
+
+    while pool and len(questions) < num_questions:
+        #extracts template from options
+        template = pool.pop()
+        #tests the template with dino data
+        question = template(dinos)
+        #appends if valid, otherwise continues looping until 5 valid questions
+        if question is not None:
+            questions.append(question)
+    return questions
 
 
