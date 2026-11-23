@@ -1,0 +1,109 @@
+:root {
+  --background-colour: #f0ebd8;
+  --text-colour: #222222;
+  --light-accent-colour: #9CC5A1;
+  --dark-accent-colour: #216869;
+  --primary-font: "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-colour);
+  color: var(--text-colour);
+  font-family: var(--primary-font);
+  line-height: 1.6;
+  margin: 0;
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+
+form {
+  background-color: #ffffff;
+  max-width: 650px;
+  width: 100%;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 4px solid var(--dark-accent-colour);
+}
+
+
+p {
+  font-size: 1.15rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--dark-accent-colour);
+}
+
+p:first-of-type {
+  margin-top: 0;
+}
+
+
+br {
+  display: none;
+}
+
+
+label {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.2rem;
+  margin-bottom: 0.6rem;
+  background-color: #f9f8f4;
+  border: 2px solid #e2decb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+label:hover {
+  border-color: var(--light-accent-colour);
+  background-color: rgba(156, 197, 161, 0.15);
+}
+
+/* Highlight the selected option (modern browsers) */
+label:has(input[type="radio"]:checked) {
+  background-color: rgba(156, 197, 161, 0.3);
+  border-color: var(--dark-accent-colour);
+  font-weight: bold;
+}
+
+/* Style the Radio Circle */
+input[type="radio"] {
+  accent-color: var(--dark-accent-colour);
+  margin-right: 12px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Submit Button */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  margin-top: 2.5rem;
+  padding: 1rem;
+  background-color: var(--dark-accent-colour);
+  color: #ffffff;
+  font-family: var(--primary-font);
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #184e4f;
+}
+
+button[type="submit"]:active {
+  transform: scale(0.99);
+}
