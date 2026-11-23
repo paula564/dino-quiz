@@ -1,0 +1,115 @@
+:root {
+  --background-colour: #f0ebd8;
+  --text-colour: #222222;
+  --light-accent-colour: #9CC5A1;
+  --dark-accent-colour: #216869;
+  --error-colour: #c94a4a;
+  --primary-font: "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-colour);
+  color: var(--text-colour);
+  font-family: var(--primary-font);
+  line-height: 1.6;
+  margin: 0;
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.results-card {
+  background-color: #ffffff;
+  max-width: 650px;
+  width: 100%;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 4px solid var(--dark-accent-colour);
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.score-banner {
+  background-color: rgba(156, 197, 161, 0.25);
+  border: 2px solid var(--dark-accent-colour);
+  color: var(--dark-accent-colour);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.35rem;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.results-list li {
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 2px solid #e2decb;
+  border-left-width: 6px;
+}
+
+.results-list li.correct {
+  background-color: rgba(156, 197, 161, 0.15);
+  border-color: var(--light-accent-colour);
+  border-left-color: var(--dark-accent-colour);
+}
+
+.results-list li.incorrect {
+  background-color: rgba(201, 74, 74, 0.08);
+  border-color: #e6b8b8;
+  border-left-color: var(--error-colour);
+}
+
+.question-title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--dark-accent-colour);
+  margin-bottom: 0.35rem;
+}
+
+.results-list li.incorrect .question-title {
+  color: var(--error-colour);
+}
+
+.results-list p {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+}
+
+.play-again-btn {
+  display: block;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: var(--dark-accent-colour);
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.play-again-btn:hover {
+  background-color: #184e4f;
+}
+
+.play-again-btn:active {
+  transform: scale(0.99);
+}

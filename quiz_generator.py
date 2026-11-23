@@ -1,7 +1,7 @@
 import random
 import json
 from collections import defaultdict
-import re
+
 
 with open("dinos.json", "r", encoding="utf-8") as file:
     dinos = json.load(file)
