@@ -22,7 +22,7 @@
     % end
     </ul>
 
-    <a href="/quiz">Try Again</a>
+    <a href="/quiz">Play Again</a>
 </body>
 </html>
 

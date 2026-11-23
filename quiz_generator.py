@@ -30,8 +30,8 @@ def q_diet(dinos):
     if len(dinos_with_diet) < 1:
         return None
     target_dino = random.choice(dinos_with_diet)
-    incorrect = [diet for diet in diets if diet != target_dino.get("Diet")]
-    return question_builder(f"What was the diet of the {target_dino.get("Name")}?", target_dino.get("Diet"), incorrect)
+    incorrect = [diet.capitalize() for diet in diets if diet != target_dino.get("Diet")]
+    return question_builder(f"What was the diet of the {target_dino.get("Name")}?", target_dino.get("Diet").capitalize(), incorrect)
         
 
 def q_period(dinos):
@@ -116,8 +116,8 @@ def q_meaning(dinos):
     if len(dinos_with_meaning) < 1 or len(meanings) < 4:
         return None
     target_dino = random.choice(dinos_with_meaning)
-    incorrect = [meaning for meaning in meanings if meaning != target_dino.get("Name meaning")]
-    return question_builder(f"What is the name meaning of the {target_dino.get("Name")}?", target_dino.get("Name meaning"), incorrect)
+    incorrect = [meaning.capitalize() for meaning in meanings if meaning != target_dino.get("Name meaning")]
+    return question_builder(f"What is the name meaning of the {target_dino.get("Name")}?", target_dino.get("Name meaning").capitalize(), incorrect)
 
 def q_heaviest_weight(dinos):
     weights = {}
