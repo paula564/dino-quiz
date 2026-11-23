@@ -10,7 +10,7 @@ def quiz_form():
 
 @post("/quiz")
 def quiz_submit():
-    
+    pass
 
 
 if __name__ == "__main__":
